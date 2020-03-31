@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1305085968250746707}
   - component: {fileID: 3361143865315627720}
   - component: {fileID: 121050781691783820}
+  - component: {fileID: -3053697871497163436}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -103,17 +104,39 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   speed: 4
+  JumpHeight: 1
   CrouchHeight: 0.15
+  Gravity: -9.81
   MouseSensitivity: 100
   GroundCheck: {fileID: 3858005066243367863}
   GroundDistance: 0.1
   GroundMask:
     serializedVersion: 2
     m_Bits: 1
-  camPos: {fileID: 6420801872142614222}
   velocity: {x: 0, y: 0, z: 0}
-  Gravity: -9.81
-  JumpHeight: 1
+  camPos: {fileID: 6420801872142614222}
+--- !u!114 &-3053697871497163436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305085968250746706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f97063fbf2f917447bf040ab14f81b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  SpherecastRadius: 0.1
+  SpherecastDistance: 1
+  InteractableMask:
+    serializedVersion: 2
+    m_Bits: 256
+  BoundryMask:
+    serializedVersion: 2
+    m_Bits: 257
 --- !u!1 &4034881209801465375
 GameObject:
   m_ObjectHideFlags: 0
