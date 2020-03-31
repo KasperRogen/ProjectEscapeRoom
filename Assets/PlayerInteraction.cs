@@ -114,6 +114,7 @@ public class PlayerInteraction : NetworkBehaviour
                     currentlyPickedUpGO.layer = LayerMask.NameToLayer("Ignore Raycast");
                     currentlyPickedUpRB = currentlyPickedUpGO.GetComponent<Rigidbody>();
                     PlayerState._instance.IsLifting = true;
+                    currentlyPickedUpRB.isKinematic = false;
                 }
             }
         }
@@ -122,8 +123,10 @@ public class PlayerInteraction : NetworkBehaviour
             if(currentlyPickedUpGO != null)
             {
                 currentlyPickedUpGO.layer = LayerMask.NameToLayer("Interactable");
+                CmdRemoveAuthority(currentlyPickedUpGO.GetComponent<NetworkIdentity>());
                 currentlyPickedUpGO = null;
                 currentlyPickedUpGODistance = 0;
+                currentlyPickedUpRB.isKinematic = true;
                 currentlyPickedUpRB = null;
                 PlayerState._instance.IsLifting = false;
             }
@@ -137,6 +140,12 @@ public class PlayerInteraction : NetworkBehaviour
     private void CmdRequestAuthority(NetworkIdentity otherId)
     {
         otherId.AssignClientAuthority(base.connectionToClient);
+    }
+
+    [Command]
+    private void CmdRemoveAuthority(NetworkIdentity otherId)
+    {
+        otherId.RemoveClientAuthority();
     }
 
 }
