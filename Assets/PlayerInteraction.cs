@@ -38,6 +38,9 @@ public class PlayerInteraction : NetworkBehaviour
 
     private void Rotate()
     {
+        if (currentlyPickedUpGO == null)
+            return;
+
         if (Input.GetMouseButtonDown(1))
         {
             PlayerState._instance.liftRotation = true;
@@ -79,7 +82,6 @@ public class PlayerInteraction : NetworkBehaviour
 
     private void RotateObject()
     {
-
         currentlyPickedUpGO.transform.LookAt(transform);
         currentlyPickedUpGO.transform.Rotate(currentlyPickedUpRotation);
     }
@@ -113,6 +115,7 @@ public class PlayerInteraction : NetworkBehaviour
                     currentlyPickedUpGODistance = Vector3.Distance(hit.transform.position, transform.position);
                     currentlyPickedUpGO.layer = LayerMask.NameToLayer("Ignore Raycast");
                     currentlyPickedUpRB = currentlyPickedUpGO.GetComponent<Rigidbody>();
+                    currentlyPickedUpGO.transform.parent = null;
                     PlayerState._instance.IsLifting = true;
                     currentlyPickedUpRB.isKinematic = false;
                 }
