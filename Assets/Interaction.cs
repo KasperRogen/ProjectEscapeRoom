@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Interaction : MonoBehaviour
 {
+    public UnityEvent OnInteract;
 
     [SerializeField]
     bool allowsPickup;
@@ -23,11 +25,13 @@ public class Interaction : MonoBehaviour
 
     internal void Interact()
     {
-        throw new NotImplementedException();
+        Debug.Log("Interacting");
+        OnInteract.Invoke();
     }
 
     internal bool AllowsPickup()
     {
         return allowsPickup;
     }
+    
 }

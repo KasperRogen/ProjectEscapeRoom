@@ -31,8 +31,20 @@ public class PlayerInteraction : NetworkBehaviour
         if(base.hasAuthority && base.isClient) { 
             PickUp();
             Interact();
-            Lift();
             Rotate();
+        }
+    }
+
+    void OnGUI()
+    {
+        GUI.Box(new Rect(Screen.width / 2, Screen.height / 2, 10, 10), "");
+    }
+
+    private void FixedUpdate()
+    {
+        if (base.hasAuthority && base.isClient)
+        {
+            Lift();
         }
     }
 
@@ -65,16 +77,29 @@ public class PlayerInteraction : NetworkBehaviour
     {
         if(currentlyPickedUpGO != null)
         {
+            if(Vector3.Distance(currentlyPickedUpGO.transform.position, transform.position) > 2)
+            {
+                currentlyPickedUpGO.transform.position = (cam.transform.position + cam.transform.forward * currentlyPickedUpGODistance);
+            }
+
+            Vector3 movementVector;
             Ray aimRay = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            float newDist = float.MaxValue;
 
-            RotateObject();
+            if (Physics.SphereCast(aimRay, SpherecastRadius, out hit, SpherecastDistance, BoundryMask))
+            {
+                newDist = Vector3.Distance(hit.point, cam.transform.position);
+            }
+
+            newDist = newDist < currentlyPickedUpGODistance ? newDist : currentlyPickedUpGODistance;
+
+            movementVector = (cam.transform.position + cam.transform.forward * newDist)
+                            - currentlyPickedUpGO.transform.position;
             
-            Vector3 movementVector = (cam.transform.position + cam.transform.forward * currentlyPickedUpGODistance)
-                - currentlyPickedUpGO.transform.position;
+            RotateObject();
 
-            Debug.DrawLine(movementVector, currentlyPickedUpGO.transform.position);
-
-            currentlyPickedUpRB.velocity = movementVector * 100 * movementVector.magnitude;
+            currentlyPickedUpRB.velocity = movementVector * Mathf.Clamp(100 * movementVector.magnitude, 0, 6);
 
 
         }
@@ -92,7 +117,7 @@ public class PlayerInteraction : NetworkBehaviour
         {
             Ray aimRay = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if(Physics.SphereCast(aimRay, SpherecastRadius, out hit, SpherecastDistance, InteractableMask))
+            if(Physics.SphereCast(aimRay, SpherecastRadius * 0.25f, out hit, SpherecastDistance, InteractableMask))
             {
                 hit.transform.GetComponent<Interaction>()?.Interact();
             }
@@ -113,11 +138,11 @@ public class PlayerInteraction : NetworkBehaviour
                     CmdRequestAuthority(hit.transform.GetComponent<NetworkIdentity>());
                     currentlyPickedUpGO = hit.transform.gameObject;
                     currentlyPickedUpGODistance = Vector3.Distance(hit.transform.position, transform.position);
-                    currentlyPickedUpGO.layer = LayerMask.NameToLayer("Ignore Raycast");
+                    currentlyPickedUpGO.layer = LayerMask.NameToLayer("PickedUp");
                     currentlyPickedUpRB = currentlyPickedUpGO.GetComponent<Rigidbody>();
                     currentlyPickedUpGO.transform.parent = null;
-                    PlayerState._instance.IsLifting = true;
                     currentlyPickedUpRB.isKinematic = false;
+                    PlayerState._instance.IsLifting = true;
                 }
             }
         }
@@ -129,7 +154,6 @@ public class PlayerInteraction : NetworkBehaviour
                 CmdRemoveAuthority(currentlyPickedUpGO.GetComponent<NetworkIdentity>());
                 currentlyPickedUpGO = null;
                 currentlyPickedUpGODistance = 0;
-                currentlyPickedUpRB.isKinematic = true;
                 currentlyPickedUpRB = null;
                 PlayerState._instance.IsLifting = false;
             }
