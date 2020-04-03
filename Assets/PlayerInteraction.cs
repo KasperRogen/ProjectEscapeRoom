@@ -38,6 +38,7 @@ public class PlayerInteraction : NetworkBehaviour
     void OnGUI()
     {
         GUI.Box(new Rect(Screen.width / 2, Screen.height / 2, 10, 10), "");
+        GUI.Label(new Rect(0, 0, 100, 50), Mathf.Ceil(1.0f / Time.deltaTime).ToString());
     }
 
     private void FixedUpdate()

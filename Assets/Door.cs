@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-
-    public Vector3 HingeOrigin;
-    public Vector3 HingeAxis;
-
     [Range(-1, 1)]
     public int RotationDir = 1;
 
@@ -45,4 +41,6 @@ public class Door : MonoBehaviour
     {
         
     }
+
+
 }

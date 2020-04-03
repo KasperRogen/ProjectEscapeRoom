@@ -43,14 +43,17 @@ public class KeypadScript : MonoBehaviour
 
         if(currentInput == Solution)
         {
-            displayRenderer.material.SetColor("_BaseMap", Color.green);
+            displayRenderer.material.SetColor("_BaseColor", Color.green);
+            displayRenderer.material.SetColor("_EmissionColor", Color.green);
             OnUnlocked.Invoke();
             yield break;
         } else
         {
-            displayRenderer.material.SetColor("_BaseMap", Color.red);
+            displayRenderer.material.SetColor("_BaseColor", Color.red);
+            displayRenderer.material.SetColor("_EmissionColor", Color.red);
             yield return new WaitForSeconds(0.5f);
-            displayRenderer.material.SetColor("_BaseMap", DefaultColor);
+            displayRenderer.material.SetColor("_BaseColor", DefaultColor);
+            displayRenderer.material.SetColor("_EmissionColor", DefaultColor);
         }
 
         currentInput = "";
@@ -69,6 +72,8 @@ public class KeypadScript : MonoBehaviour
         displayText = Display.GetComponentInChildren<TextMeshPro>();
         displayRenderer = Display.GetComponent<Renderer>();
         displayText.text = currentInput;
+
+        displayRenderer.material.SetColor("_EmissionColor", DefaultColor);
     }
 
     // Update is called once per frame
