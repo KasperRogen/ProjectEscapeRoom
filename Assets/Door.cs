@@ -18,7 +18,7 @@ public class Door : MonoBehaviour
 
     public void Open()
     {
-        Debug.Log("OPENING");
+        Debug.Log("OPENING " + transform.gameObject.name);
         StartCoroutine(OpenProcess());
     }
 

@@ -111,7 +111,7 @@ MonoBehaviour:
   Gravity: -9.81
   MouseSensitivity: 100
   GroundCheck: {fileID: 3858005066243367863}
-  GroundDistance: 0.5
+  GroundDistance: 0.1
   GroundMask:
     serializedVersion: 2
     m_Bits: 1

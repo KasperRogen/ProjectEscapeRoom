@@ -30,6 +30,7 @@ public class FirstPersonController : NetworkBehaviour
     bool isCrouched;
     float xRotation = 0f;
     public Vector3 velocity;
+    CapsuleCollider collider;
 
     //For looking
     public Transform camPos;
@@ -48,6 +49,7 @@ public class FirstPersonController : NetworkBehaviour
                 //Grab the camera for the player to control
                 cam = Camera.main.transform;
             }
+            collider = GetComponent<CapsuleCollider>();
         }
 
     }
@@ -84,6 +86,8 @@ public class FirstPersonController : NetworkBehaviour
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * CrouchHeight, transform.localScale.z);
             cc.height = cc.height * CrouchHeight;
             cc.radius = cc.height;
+            collider.height = collider.height * CrouchHeight;
+            collider.radius = collider.height;
             transform.position = new Vector3(transform.position.x, cc.height / 2, transform.position.z);
         }
 
@@ -95,6 +99,10 @@ public class FirstPersonController : NetworkBehaviour
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y / CrouchHeight, transform.localScale.z);
             cc.height = cc.height / CrouchHeight;
             cc.radius = 0.5f;
+
+            collider.height = collider.height / CrouchHeight;
+            collider.radius = 0.42f;
+
             transform.position = new Vector3(transform.position.x, cc.height / 2, transform.position.z);
         }
     }
@@ -112,12 +120,13 @@ public class FirstPersonController : NetworkBehaviour
     {
         float PlayerWidth = 0.5f;
         //TODO: Make this not ground mask
+
         return Physics.SphereCast( //See if a sphere the width of the player can be cast upwards without hitting anything
                 new Ray(transform.position, transform.up),
                 PlayerWidth,
                 (cc.height / CrouchHeight) - (PlayerWidth / 2),
                 GroundMask) == false
-        && Physics.CheckSphere(transform.position + transform.up * (PlayerWidth/2.1f), PlayerWidth) == false;
+        /*&& Physics.CheckSphere(transform.position + transform.up * (PlayerWidth/2.1f), PlayerWidth) == false*/;
         //Check the immediate surroundings for space to stand up
 
     }
