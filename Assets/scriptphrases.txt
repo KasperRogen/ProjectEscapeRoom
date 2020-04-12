@@ -1,0 +1,2 @@
+00:10, "welcome to here"
+00:15, "this is the game"
